@@ -23,7 +23,12 @@ class NewsBlur():
     def _nb_get(self, url, payload=None):
         if payload is None:
             payload = {}
-        results = requests.get(nb_url + url, params=payload, cookies=self.cookies)
+
+        try:
+            results = requests.get(nb_url + url, params=payload, cookies=self.cookies)
+        except:
+            raise NewsblurException("Can't reach Newsblur right now")
+
         if results.status_code != 200:
             raise NewsblurException("Newsblur returned error code " + str(results.status_code) + ", " + r.content)
 
@@ -43,7 +48,7 @@ class NewsBlur():
         return decoded_results
 
 
-    def login(self, username,password):
+    def login(self, username, password):
         '''
         Login as an existing user.
         If a user has no password set, you cannot just send any old password. 
@@ -79,7 +84,7 @@ class NewsBlur():
         return results
 
 
-    def search_feed(self, address,offset=1):
+    def search_feed(self, address, offset=1):
         '''
         
         Retrieve information about a feed from its website or RSS address.
@@ -203,19 +208,19 @@ class NewsBlur():
         return results
 
 
-    def river_stories(self, feeds,page=1,read_stories_count=0):
+    def river_stories(self, feeds, page=1, read_stories_count=0):
         '''
         Retrieve stories from a collection of feeds. This is known as the River of News.
         Stories are ordered in reverse chronological order.
         '''
 
         url = "reader/river_stories"
-        payload = {"feeds": feeds,"page": page, "read_stories_count": read_stories_count}
+        payload = {"feeds": feeds, "page": page, "read_stories_count": read_stories_count}
         results = self._nb_get(url, payload=payload)
         return results
 
 
-    def mark_story_as_read(self, story_id,feed_id):
+    def mark_story_as_read(self, story_id, feed_id):
         '''
         Mark stories as read.
         Multiple story ids can be sent at once.
@@ -228,7 +233,7 @@ class NewsBlur():
         return results
 
 
-    def mark_story_as_unread(self, story_id,feed_id):
+    def mark_story_as_unread(self, story_id, feed_id):
         '''
         Mark stories as read.
         Multiple story ids can be sent at once.
@@ -241,7 +246,7 @@ class NewsBlur():
         return results
 
 
-    def mark_story_as_starred(self, story_id,feed_id):
+    def mark_story_as_starred(self, story_id, feed_id):
         '''
         Mark a story as starred (saved).
         '''
@@ -288,7 +293,7 @@ class NewsBlur():
         return results
 
 
-    def rename_feed(self, feed_title,feed_id):
+    def rename_feed(self, feed_title, feed_id):
         '''
         Rename a feed title. Only the current user will see the new title.
         '''
@@ -299,7 +304,7 @@ class NewsBlur():
         return results
 
 
-    def delete_feed(self, feed_id,in_folder):
+    def delete_feed(self, feed_id, in_folder):
         '''
         Unsubscribe from a feed. Removes it from the folder.
         Set the in_folder parameter to remove a feed from the correct folder, in case the user is subscribed to the feed in multiple folders.
@@ -311,7 +316,7 @@ class NewsBlur():
         return results
 
 
-    def rename_folder(self, folder_to_rename,new_folder_name,in_folder):
+    def rename_folder(self, folder_to_rename, new_folder_name, in_folder):
         '''
         Rename a folder.
         '''
@@ -322,7 +327,7 @@ class NewsBlur():
         return results
 
 
-    def delete_folder(self, folder_to_delete,in_folder,feed_id):
+    def delete_folder(self, folder_to_delete, in_folder, feed_id):
         '''
         Delete a folder and unsubscribe from all feeds inside.
         '''
