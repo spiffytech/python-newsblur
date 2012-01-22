@@ -6,12 +6,12 @@ import simplejson
 import requests
 
 __author__ = 'Dananjaya Ramanayake <dananjaya86@gmail.com>, spiffytech <spiffytechgmail.com>'
-__version__ = "1.0"
+__version__ = "2.0"
+
 
 nb_url = "http://www.newsblur.com/"
 
-
-class NewsblurException(IOError):
+class NewsblurException(IOError):  # Exists just to have a specific exception for calling applications to catch
     pass
 
 
